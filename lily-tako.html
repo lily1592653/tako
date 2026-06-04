@@ -1,0 +1,234 @@
+<html lang="ja"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한국어 연습장 — 韓国語練習帳</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Shippori+Mincho:wght@400;600;800&display=swap');
+:root{--paper:#f4efe3;--ink:#23201a;--ink-soft:#6b6357;--teal:#0f5e5e;--vermilion:#c2452d;--line:#d8cfba;--card:#fbf8f0;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:'Shippori Mincho',serif;background:var(--paper);color:var(--ink);
+  background-image:repeating-linear-gradient(transparent,transparent 38px,rgba(15,94,94,.05) 39px);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:32px 18px 80px;}
+.wrap{width:100%;max-width:680px;}
+header{text-align:center;margin-bottom:34px;}
+.kr-title{font-family:'Gowun Batang',serif;font-size:42px;letter-spacing:2px;color:var(--teal);}
+.jp-title{font-size:14px;color:var(--ink-soft);letter-spacing:6px;margin-top:6px;}
+.rule{width:46px;height:3px;background:var(--vermilion);margin:18px auto 0;}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:4px;
+  box-shadow:0 14px 40px -28px rgba(35,32,26,.6);padding:30px 28px;}
+label.field{display:block;font-size:13px;color:var(--ink-soft);letter-spacing:2px;margin-bottom:10px;}
+.dir-sel{display:flex;gap:8px;margin:0 0 18px;}
+.dir-sel button{flex:1;padding:10px;border:1px solid var(--line);background:#fffdf7;color:var(--ink-soft);
+  font-family:'Shippori Mincho',serif;font-size:14px;border-radius:3px;cursor:pointer;letter-spacing:1px;}
+.dir-sel button.on{background:var(--teal);color:var(--paper);border-color:var(--teal);}
+textarea{width:100%;min-height:200px;resize:vertical;font-family:'Shippori Mincho',serif;
+  font-size:17px;line-height:1.9;color:var(--ink);background:#fffdf7;border:1px solid var(--line);
+  border-radius:3px;padding:14px 16px;}
+textarea:focus{outline:none;border-color:var(--teal);}
+.hint{font-size:12.5px;color:var(--ink-soft);margin-top:10px;line-height:1.8;}
+.hint code{background:#efe7d4;padding:1px 6px;border-radius:3px;font-family:monospace;}
+.btn{font-family:'Shippori Mincho',serif;cursor:pointer;border:none;letter-spacing:2px;transition:transform .12s ease,opacity .2s;}
+.btn:active{transform:translateY(1px);}
+.btn-main{display:block;width:100%;margin-top:22px;background:var(--teal);color:#f4efe3;
+  font-size:18px;font-weight:600;padding:15px;border-radius:3px;}
+.progress{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:13px;color:var(--ink-soft);letter-spacing:2px;}
+.bar{height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:26px;}
+.bar>i{display:block;height:100%;background:var(--vermilion);width:0;transition:width .35s ease;}
+.card{text-align:center;animation:rise .35s ease;}
+@keyframes rise{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+.q-label{font-size:12px;color:var(--ink-soft);letter-spacing:4px;margin-bottom:14px;}
+.q-ja{font-size:30px;font-weight:600;line-height:1.5;}
+.q-ko{font-family:'Gowun Batang',serif;font-size:40px;color:var(--ink);line-height:1.4;}
+.answer-input{width:100%;font-family:'Gowun Batang',serif;font-size:24px;text-align:center;
+  border:none;border-bottom:2px solid var(--line);background:transparent;color:var(--teal);padding:12px 4px;margin:22px 0 8px;}
+.answer-input:focus{outline:none;border-color:var(--teal);}
+.reveal{margin-top:18px;padding-top:22px;border-top:1px dashed var(--line);animation:rise .3s ease;}
+.a-ko{font-family:'Gowun Batang',serif;font-size:46px;color:var(--ink);line-height:1.3;}
+.a-ja{font-family:'Shippori Mincho',serif;font-size:34px;font-weight:600;color:var(--ink);line-height:1.5;}
+.a-pron{font-size:18px;color:var(--vermilion);margin-top:6px;letter-spacing:1px;}
+.a-note{font-size:14px;color:var(--ink-soft);margin-top:12px;line-height:1.7;}
+.speak{margin-top:14px;background:none;border:1px solid var(--line);border-radius:20px;padding:6px 16px;font-size:13px;color:var(--teal);cursor:pointer;}
+.row{display:flex;gap:12px;margin-top:26px;}
+.row .btn{flex:1;padding:14px;font-size:16px;border-radius:3px;}
+.btn-reveal{background:var(--ink);color:var(--paper);}
+.btn-wrong{background:#fff;border:1.5px solid var(--vermilion);color:var(--vermilion);}
+.btn-right{background:var(--teal);color:var(--paper);}
+.result{text-align:center;animation:rise .4s ease;}
+.score-num{font-family:'Gowun Batang',serif;font-size:72px;color:var(--teal);line-height:1;}
+.score-sub{font-size:15px;color:var(--ink-soft);letter-spacing:2px;margin-top:8px;}
+.miss-list{text-align:left;margin:26px 0;border-top:1px solid var(--line);}
+.miss{display:flex;justify-content:space-between;padding:12px 4px;border-bottom:1px solid var(--line);gap:12px;}
+.miss .mj{color:var(--ink-soft);}
+.miss .mk{font-family:'Gowun Batang',serif;font-size:20px;color:var(--ink);text-align:right;}
+.error{background:#fff4f1;border:1px solid var(--vermilion);color:var(--vermilion);padding:14px;border-radius:3px;margin-top:16px;font-size:14px;line-height:1.7;}
+.foot{text-align:center;font-size:11px;color:var(--ink-soft);letter-spacing:1px;margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kr-title">한국어 연습장</div>
+    <div class="jp-title">韓 国 語 練 習 帳</div>
+    <div class="rule"></div>
+  </header>
+  <div id="app">
+  <div class="panel">
+    <label class="field">出題の方向</label>
+    <div class="dir-sel">
+      <button data-d="ja2ko" class="">日 → 韓</button>
+      <button data-d="ko2ja" class="on">韓 → 日</button>
+      <button data-d="mix" class="">ランダム</button>
+    </div>
+    <label class="field">日本語と韓国語のペアを入力（1行に1つ）</label>
+    <textarea id="ta" placeholder="水を飲む / 물을 마시다
+約束 / 약속
+どこに行きますか？ / 어디에 가세요?
+ありがとう / 감사합니다 / カムサハムニダ"></textarea>
+    <div class="hint">区切りは <code>/</code> <code>，</code> タブ（Excelからのコピペ可）。3つ目は発音/メモになります。<br>入力と方向は自動保存され、次回開くと復元されます。</div>
+    
+    <button class="btn btn-main" id="go">問題をつくる</button>
+  </div></div>
+  <div class="foot">日本語と韓国語を入力 → 方向を選んでクイズ｜オフライン・無料・誰でも</div>
+</div>
+<script>
+const app=document.getElementById('app');
+const INIT=()=>({mode:'input',text:'',dir:'ja2ko',items:[],idx:0,revealed:false,results:[],typed:'',error:null});
+let S=INIT();
+const LS='korean_quiz_self_text';
+try{const saved=localStorage.getItem(LS);if(saved)S.text=saved;}catch(e){}
+try{const d=localStorage.getItem(LS+'_dir');if(d)S.dir=d;}catch(e){}
+
+function parseInput(text){
+  const lines=text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const items=[];
+  for(const line of lines){
+    let parts=null;
+    if(line.includes('\t'))parts=line.split('\t');
+    else if(line.includes('/'))parts=line.split('/');
+    else if(line.includes('／'))parts=line.split('／');
+    else if(line.includes(','))parts=line.split(',');
+    else continue;
+    parts=parts.map(p=>p.trim());
+    if(parts.length<2||!parts[0]||!parts[1])continue;
+    items.push({ja:parts[0],ko:parts[1],pron:parts[2]||'',note:parts[3]||''});
+  }
+  return items;
+}
+function start(){
+  const items=parseInput(S.text);
+  if(items.length===0){
+    S.error="ペアが読み取れませんでした。各行を「日本語 / 韓国語」の形式にしてください（区切りは / ， タブ のいずれか）。";
+    render();return;
+  }
+  try{localStorage.setItem(LS,S.text);localStorage.setItem(LS+'_dir',S.dir);}catch(e){}
+  items.forEach(it=>{it._dir=(S.dir==='mix')?(Math.random()<0.5?'ja2ko':'ko2ja'):S.dir;});
+  S.items=items;S.idx=0;S.revealed=false;S.results=[];S.typed='';S.error=null;S.mode='quiz';render();
+}
+function reveal(){S.revealed=true;render();}
+function answer(c){
+  S.results.push(Object.assign({},S.items[S.idx],{correct:c}));
+  S.idx++;S.revealed=false;S.typed='';
+  if(S.idx>=S.items.length)S.mode='result';
+  render();
+}
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang="ko-KR";speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}}
+function retryMissed(){
+  const m=S.results.filter(r=>!r.correct);if(!m.length)return;
+  S.items=m.map(x=>({ja:x.ja,ko:x.ko,pron:x.pron,note:x.note,_dir:x._dir}));
+  S.idx=0;S.revealed=false;S.results=[];S.typed='';S.mode='quiz';render();
+}
+function backToInput(){S.mode='input';S.error=null;render();}
+function render(){
+  if(S.mode==='input')return renderInput();
+  if(S.mode==='quiz')return renderQuiz();
+  if(S.mode==='result')return renderResult();
+}
+function renderInput(){
+  app.innerHTML=`
+  <div class="panel">
+    <label class="field">出題の方向</label>
+    <div class="dir-sel">
+      <button data-d="ja2ko" class="${S.dir==='ja2ko'?'on':''}">日 → 韓</button>
+      <button data-d="ko2ja" class="${S.dir==='ko2ja'?'on':''}">韓 → 日</button>
+      <button data-d="mix" class="${S.dir==='mix'?'on':''}">ランダム</button>
+    </div>
+    <label class="field">日本語と韓国語のペアを入力（1行に1つ）</label>
+    <textarea id="ta" placeholder="水を飲む / 물을 마시다&#10;約束 / 약속&#10;どこに行きますか？ / 어디에 가세요?&#10;ありがとう / 감사합니다 / カムサハムニダ"></textarea>
+    <div class="hint">区切りは <code>/</code> <code>，</code> タブ（Excelからのコピペ可）。3つ目は発音/メモになります。<br>入力と方向は自動保存され、次回開くと復元されます。</div>
+    ${S.error?`<div class="error">${S.error}</div>`:''}
+    <button class="btn btn-main" id="go">問題をつくる</button>
+  </div>`;
+  document.querySelectorAll('.dir-sel button').forEach(b=>b.onclick=()=>{S.dir=b.dataset.d;render();});
+  const ta=document.getElementById('ta');ta.value=S.text;
+  ta.addEventListener('input',e=>{S.text=e.target.value;});
+  document.getElementById('go').onclick=start;
+}
+function renderQuiz(){
+  const it=S.items[S.idx];
+  const koQ=(it._dir||'ja2ko')==='ko2ja';
+  const qText=koQ?it.ko:it.ja;
+  const aText=koQ?it.ja:it.ko;
+  const qClass=koQ?'q-ko':'q-ja';
+  const aClass=koQ?'a-ja':'a-ko';
+  const label=koQ?'한국어 → JAPANESE':'JAPANESE → 한국어';
+  const pct=Math.round((S.idx/S.items.length)*100);
+  app.innerHTML=`
+  <div class="panel">
+    <div class="progress"><span>問題 ${S.idx+1} / ${S.items.length}</span><span>${pct}%</span></div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <div class="card">
+      <div class="q-label">${label}</div>
+      <div class="${qClass}">${esc(qText)}</div>
+      ${koQ?`<button class="speak" id="spq">🔊 韓国語を聞く</button>`:''}
+      <input class="answer-input" id="ai" placeholder="${koQ?'日本語で答える（任意）':'ハングルで答える（任意）'}"/>
+      ${S.revealed?`
+        <div class="reveal">
+          <div class="${aClass}">${esc(aText)}</div>
+          ${it.pron?`<div class="a-pron">${esc(it.pron)}</div>`:''}
+          ${it.note&&it.note!==it.pron?`<div class="a-note">${esc(it.note)}</div>`:''}
+          <button class="speak" id="sp">🔊 韓国語を聞く</button>
+        </div>
+        <div class="row">
+          <button class="btn btn-wrong" id="w">✕ まちがえた</button>
+          <button class="btn btn-right" id="r">○ せいかい</button>
+        </div>`:`
+        <div class="row"><button class="btn btn-reveal" id="rv">答えを見る</button></div>`}
+    </div>
+  </div>`;
+  const ai=document.getElementById('ai');
+  if(ai){ai.value=S.typed;ai.addEventListener('input',e=>S.typed=e.target.value);}
+  const spq=document.getElementById('spq');if(spq)spq.onclick=()=>speak(it.ko);
+  if(S.revealed){
+    document.getElementById('sp').onclick=()=>speak(it.ko);
+    document.getElementById('w').onclick=()=>answer(false);
+    document.getElementById('r').onclick=()=>answer(true);
+    speak(it.ko);
+  }else{
+    document.getElementById('rv').onclick=reveal;
+  }
+}
+function renderResult(){
+  const total=S.results.length,right=S.results.filter(r=>r.correct).length;
+  const pct=total?Math.round(right/total*100):0;
+  const missed=S.results.filter(r=>!r.correct);
+  app.innerHTML=`
+  <div class="panel"><div class="result">
+    <div class="score-num">${pct}<span style="font-size:28px">%</span></div>
+    <div class="score-sub">${right} / ${total} 正解</div>
+    ${missed.length?`<div class="miss-list">
+        ${missed.map(m=>`<div class="miss"><span class="mj">${esc(m.ja)}</span><span class="mk">${esc(m.ko)}</span></div>`).join('')}
+      </div>`:`<div class="score-sub" style="margin-top:20px;color:var(--teal)">전부 정답! 全問正解 🎉</div>`}
+    <div class="row">
+      ${missed.length?`<button class="btn btn-right" id="rt">間違いだけ復習</button>`:''}
+      <button class="btn btn-reveal" id="rs">入力に戻る</button>
+    </div>
+  </div></div>`;
+  if(missed.length)document.getElementById('rt').onclick=retryMissed;
+  document.getElementById('rs').onclick=backToInput;
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+render();
+</script>
+
+</body></html>
